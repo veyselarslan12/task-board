@@ -15,8 +15,8 @@ const doneListEl = $('#done-cards')
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
+    return Math.random()
     
-
 }
 
 // Todo: create a function to create a task card
@@ -48,10 +48,9 @@ function renderTaskList() {
 
     for (const task of savedProjects) {
         const cardEl = createTaskCard(task)
-
         if (task.status === 'todo') {
             todoListEl.append(cardEl)
-        } else if (task.status === 'in progress') {
+        } else if (task.status === 'in-progress') {
             inProgressListEl.append(cardEl)
         } else {
             doneListEl.append(cardEl)
@@ -82,7 +81,7 @@ function handleAddTask(event) {
   let taskList = loadProjectFromLocalStorage();
 
   const newProject = {
-    id: Math.random(),
+    id: generateTaskId(),
     name: title,
     type: description,
     dateDue: dueDate,
@@ -105,9 +104,10 @@ function handleAddTask(event) {
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
     const cardId = $(event.target).closest('.card').data('id');
+    console.log(cardId)
     const projects = loadProjectFromLocalStorage()
     const projectsToKeep = []
-
+    console.log(event)
     for (const task of projects) {
         if(cardId !== task.id) {
             projectsToKeep.push(task)
@@ -123,7 +123,6 @@ function handleDeleteTask(event) {
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
     const targetListId = event.target.id.replace('-cards', '')
-
     const card = ui.draggable[0]
 
     const projectId = $(card).data('id')
@@ -154,7 +153,7 @@ $(document).ready(function () {
         drop:  handleDrop
     })
     
-    $('.swim-lanes').on('click', 'delete-card', handleDeleteTask)
+    $('.swim-lanes').on('click', '.delete-card', handleDeleteTask)
 
 });
 
