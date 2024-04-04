@@ -104,7 +104,6 @@ function handleAddTask(event) {
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
     const cardId = $(event.target).closest('.card').data('id');
-    console.log(cardId)
     const projects = loadProjectFromLocalStorage()
     const projectsToKeep = []
     console.log(event)
