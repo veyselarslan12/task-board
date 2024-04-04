@@ -12,7 +12,6 @@ const inProgressListEl = $('#in-progress-cards')
 const doneListEl = $('#done-cards')
 // console.log(todoListEl, inProgressListEl, doneListEl)
 
-$("#datepicker").datepicker();
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -28,7 +27,7 @@ function createTaskCard(task) {
                 <h5 class="card-title">${task.name}</h5>
                 <p class="card-text">${task.type}</p>
                 <p class="card-text">${task.dateDue}</p>
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger delete-card">Delete</button>
             </div>
         </div>
     `)
@@ -105,46 +104,57 @@ function handleAddTask(event) {
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
+    const cardId = $(event.target).closest('.card').data('id');
+    const projects = loadProjectFromLocalStorage()
+    const projectsToKeep = []
 
-     
+    for (const task of projects) {
+        if(cardId !== task.id) {
+            projectsToKeep.push(task)
+        }
+    }
+    
+    saveProjectToLocalStorage(projectsToKeep)
 
+    renderTaskList()
 
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-    $('.swim-lane').droppable({
-        drop: function(event, ui) {
+    const targetListId = event.target.id.replace('-cards', '')
 
-            const targetListId = event.target.id.replace('-cards', '')
+    const card = ui.draggable[0]
 
-            const card = ui.draggable[0]
+    const projectId = $(card).data('id')
 
-            const projectId = $(card).data('id')
+    const projects = loadProjectFromLocalStorage()
 
-            const projects = loadProjectFromLocalStorage()
-
-            for(const tasks of projects) {
-                if (tasks.id === projectId) {
-                    tasks.status = targetListId
-                }
-
+    for(const task of projects) {
+        if (task.id === projectId) {
+                task.status = targetListId
             }
-            saveProjectToLocalStorage(projects)
 
-            renderTaskList()
         }
-    });
+    saveProjectToLocalStorage(projects)
+
+    renderTaskList()
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
 
+    $("#datepicker").datepicker();
+
     projectFormEl.on("click", handleAddTask);
 
     renderTaskList();
 
-    handleDrop()
+    $('.swim-lane').droppable({
+        drop:  handleDrop
+    })
+    
+    $('.swim-lanes').on('click', 'delete-card', handleDeleteTask)
 
 });
 
