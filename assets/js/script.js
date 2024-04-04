@@ -9,6 +9,7 @@ const projectDateInputEl = $("#datepicker");
 const todoListEl = $('#todo-cards')
 const inProgressListEl = $('#in-progress-cards')
 const doneListEl = $('#done-cards')
+// console.log(todoListEl, inProgressListEl, doneListEl)
 
 $("#datepicker").datepicker();
 
@@ -40,8 +41,21 @@ function createTaskCard(task) {
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
    const savedProjects = loadProjectFromLocalStorage()
+
+   todoListEl.empty()
+   inProgressListEl.empty()
+   doneListEl.empty()
+
     for (const task of savedProjects) {
         const cardEl = createTaskCard(task)
+
+        if (task.status === 'todo') {
+            todoListEl.append(cardEl)
+        } else if (task.status === 'in progress') {
+            inProgressListEl.append(cardEl)
+        } else {
+            doneListEl.append(cardEl)
+        }
     }
 }
 
@@ -82,7 +96,7 @@ function handleAddTask(event) {
   projectTypeInputEl.val("");
   projectDateInputEl.val("");
 }
-projectFormEl.on("click", handleAddTask);
+
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
@@ -102,6 +116,9 @@ function handleDrop(event, ui) {
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
 
+    projectFormEl.on("click", handleAddTask);
+
+    renderTaskList();
 
 
 });
