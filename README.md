@@ -28,6 +28,6 @@ A task board is a digital tool that allows teams to organize and track project t
 
 ## Links
 
-* [Github Repository](https://github.com/veyselarslan12/personal-blog)
+* [Github Repository](https://github.com/veyselarslan12/task-board)
 
-* [Deployment Website Link](https://veyselarslan12.github.io/personal-blog/)
+* [Deployment Website Link](https://veyselarslan12.github.io/task-board/)
